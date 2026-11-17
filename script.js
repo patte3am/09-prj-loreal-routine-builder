@@ -261,7 +261,7 @@ function renderConversation() {
 }
 
 function addInlineText(parent, text) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https:\/\/[^)\s]+\))/g);
 
   parts.forEach((part) => {
     if (part.startsWith("**") && part.endsWith("**")) {
@@ -269,6 +269,26 @@ function addInlineText(parent, text) {
       strong.textContent = part.slice(2, -2);
       parent.appendChild(strong);
       return;
+    }
+
+    const markdownLink = part.match(/^\[([^\]]+)\]\((https:\/\/[^)\s]+)\)$/);
+    if (markdownLink) {
+      let url;
+      try {
+        url = new URL(markdownLink[2]);
+      } catch {
+        url = null;
+      }
+
+      if (url && url.protocol === "https:") {
+        const link = document.createElement("a");
+        link.href = url.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = markdownLink[1];
+        parent.appendChild(link);
+        return;
+      }
     }
 
     parent.appendChild(document.createTextNode(part));

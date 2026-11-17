@@ -774,6 +774,12 @@ a:focus-visible {
   margin-top: 5px;
 }
 
+.chat-bubble a {
+  color: #8f1d25;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .chat-citations {
   margin-top: 14px;
   padding-top: 10px;
