@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>L'Oréal | Routine Builder</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <header class="site-header">
+        <img src="img/loreal-logo.png" alt="L'Oréal logo" class="logo" />
+        <h1 class="site-title">Routine Builder</h1>
+      </header>
+
+      <section class="toolbar" aria-label="Product filters">
+        <label class="search-field" for="searchInput">
+          <span class="search-icon" aria-hidden="true">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search products..."
+            aria-label="Search products by name, brand, or description"
+            autocomplete="off"
+          />
+        </label>
+
+        <label class="category-field" for="categoryFilter">
+          <span class="visually-hidden">Choose a category</span>
+          <select id="categoryFilter" aria-label="Filter products by category">
+            <option value="all">All Categories</option>
+          </select>
+        </label>
+      </section>
+
+      <main>
+        <div id="productsContainer" class="products-grid" aria-live="polite"></div>
+        <div id="showMoreWrap" class="show-more-wrap"></div>
+
+        <section class="selected-products" aria-live="polite">
+          <div class="section-heading-row">
+            <h2>Selected Products</h2>
+            <span id="selectedCount" class="selected-count">0 selected</span>
+          </div>
+          <div id="selectedProductsList" class="selected-products-list"></div>
+          <button id="generateRoutine" class="generate-btn" type="button">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            Generate Routine
+          </button>
+        </section>
+
+        <section class="chatbox" aria-label="About your routine chat section">
+          <div class="chatbox-header">
+            <h2>About Your Routine</h2>
+            <p>Get personalized advice and answers about your skincare routine.</p>
+          </div>
+
+          <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+
+          <form id="chatForm" class="chat-form">
+            <label for="userInput" class="visually-hidden">Ask about your routine</label>
+            <input
+              id="userInput"
+              name="userInput"
+              type="text"
+              placeholder="Ask about your routine..."
+              autocomplete="off"
+              required
+            />
+            <button type="submit" id="sendBtn" aria-label="Send message">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>&copy; 2025 L'Oréal. Educational project demo.</p>
+        <nav aria-label="Footer links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Contact</a>
+        </nav>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
