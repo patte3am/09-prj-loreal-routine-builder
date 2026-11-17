@@ -4,6 +4,9 @@
   "main": "src/worker.js",
   "compatibility_date": "2026-11-17",
   "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGIN": "https://patte3am.github.io"
+  },
   "assets": {
     "directory": "./",
     "binding": "ASSETS",

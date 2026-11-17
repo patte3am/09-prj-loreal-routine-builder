@@ -1,4 +1,4 @@
-const ALLOWED_ORIGIN = "https://patte3am.github.io";
+const DEFAULT_ALLOWED_ORIGIN = "https://patte3am.github.io";
 const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 const MAX_BODY_BYTES = 64 * 1024;
 const MAX_MESSAGES = 40;
@@ -16,14 +16,14 @@ const SYSTEM_MESSAGE = {
 
 class PayloadTooLargeError extends Error {}
 
-function jsonResponse(body, status, origin) {
+function jsonResponse(body, status, origin, allowedOrigin = DEFAULT_ALLOWED_ORIGIN) {
   const headers = new Headers({
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
   });
 
-  if (origin === ALLOWED_ORIGIN) {
-    headers.set("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+  if (origin === allowedOrigin) {
+    headers.set("Access-Control-Allow-Origin", allowedOrigin);
     headers.set("Vary", "Origin");
   }
 
@@ -150,20 +150,26 @@ function validateMessages(messages) {
   return [SYSTEM_MESSAGE, ...normalizedMessages];
 }
 
-async function handleChatRequest(request, env, origin) {
-  if (origin !== ALLOWED_ORIGIN) {
-    return jsonResponse({ error: "Origin is not allowed." }, 403, origin);
+async function handleChatRequest(request, env, origin, allowedOrigin) {
+  if (origin !== allowedOrigin) {
+    return jsonResponse({ error: "Origin is not allowed." }, 403, origin, allowedOrigin);
   }
 
   if (request.headers.get("Content-Type")?.split(";")[0].trim() !== "application/json") {
-    return jsonResponse({ error: "Content-Type must be application/json." }, 415, origin);
+    return jsonResponse(
+      { error: "Content-Type must be application/json." },
+      415,
+      origin,
+      allowedOrigin
+    );
   }
 
   if (isRateLimited(getClientIp(request), Date.now())) {
     return jsonResponse(
       { error: "Too many requests. Please wait a minute and try again." },
       429,
-      origin
+      origin,
+      allowedOrigin
     );
   }
 
@@ -175,7 +181,8 @@ async function handleChatRequest(request, env, origin) {
     return jsonResponse(
       { error: isTooLarge ? "Request body is too large." : error.message },
       isTooLarge ? 413 : 400,
-      origin
+      origin,
+      allowedOrigin
     );
   }
 
@@ -187,12 +194,18 @@ async function handleChatRequest(request, env, origin) {
           "messages must contain valid user and assistant messages, with no more than 40 messages or 48,000 characters.",
       },
       400,
-      origin
+      origin,
+      allowedOrigin
     );
   }
 
   if (!env.OPENAI_API_KEY) {
-    return jsonResponse({ error: "The AI service is not configured." }, 503, origin);
+    return jsonResponse(
+      { error: "The AI service is not configured." },
+      503,
+      origin,
+      allowedOrigin
+    );
   }
 
   let openAiResponse;
@@ -210,7 +223,12 @@ async function handleChatRequest(request, env, origin) {
       }),
     });
   } catch {
-    return jsonResponse({ error: "Could not reach the AI service. Please try again." }, 502, origin);
+    return jsonResponse(
+      { error: "Could not reach the AI service. Please try again." },
+      502,
+      origin,
+      allowedOrigin
+    );
   }
 
   if (!openAiResponse.ok) {
@@ -223,7 +241,8 @@ async function handleChatRequest(request, env, origin) {
             : "The AI service could not complete the request.",
       },
       status,
-      origin
+      origin,
+      allowedOrigin
     );
   }
 
@@ -231,12 +250,22 @@ async function handleChatRequest(request, env, origin) {
   try {
     openAiData = await openAiResponse.json();
   } catch {
-    return jsonResponse({ error: "The AI service returned an invalid response." }, 502, origin);
+    return jsonResponse(
+      { error: "The AI service returned an invalid response." },
+      502,
+      origin,
+      allowedOrigin
+    );
   }
 
   const content = openAiData?.choices?.[0]?.message?.content;
   if (typeof content !== "string" || !content.trim()) {
-    return jsonResponse({ error: "The AI service returned an empty response." }, 502, origin);
+    return jsonResponse(
+      { error: "The AI service returned an empty response." },
+      502,
+      origin,
+      allowedOrigin
+    );
   }
 
   return jsonResponse(
@@ -251,7 +280,8 @@ async function handleChatRequest(request, env, origin) {
       ],
     },
     200,
-    origin
+    origin,
+    allowedOrigin
   );
 }
 
@@ -259,19 +289,30 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin");
+    const allowedOrigin = env.ALLOWED_ORIGIN || DEFAULT_ALLOWED_ORIGIN;
 
     if (url.pathname === "/api/health" && request.method === "GET") {
-      return jsonResponse({ ok: true, service: "loreal-routine-builder" }, 200, origin);
+      return jsonResponse(
+        { ok: true, service: "loreal-routine-builder" },
+        200,
+        origin,
+        allowedOrigin
+      );
     }
 
     if (url.pathname === "/api/chat") {
       if (request.method === "OPTIONS") {
-        if (origin !== ALLOWED_ORIGIN) {
-          return jsonResponse({ error: "Origin is not allowed." }, 403, origin);
+        if (origin !== allowedOrigin) {
+          return jsonResponse(
+            { error: "Origin is not allowed." },
+            403,
+            origin,
+            allowedOrigin
+          );
         }
 
         const headers = new Headers({
-          "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+          "Access-Control-Allow-Origin": allowedOrigin,
           "Access-Control-Allow-Methods": "POST, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Max-Age": "86400",
@@ -284,11 +325,12 @@ export default {
         return jsonResponse(
           { error: "Method not allowed." },
           405,
-          origin
+          origin,
+          allowedOrigin
         );
       }
 
-      return handleChatRequest(request, env, origin);
+      return handleChatRequest(request, env, origin, allowedOrigin);
     }
 
     return env.ASSETS.fetch(request);
