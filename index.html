@@ -3,7 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>L'Oréal | Routine Builder</title>
+    <meta
+      name="description"
+      content="Discover products from L'Oréal-owned beauty brands and build a personalized beauty routine with an AI-powered portfolio project."
+    />
+    <meta name="theme-color" content="#090909" />
+    <link
+      rel="canonical"
+      href="https://patte3am.github.io/09-prj-loreal-routine-builder/"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="https://patte3am.github.io/09-prj-loreal-routine-builder/img/favicon.svg"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://patte3am.github.io/09-prj-loreal-routine-builder/"
+    />
+    <meta
+      property="og:title"
+      content="L'Oréal Paris AI Routine Builder | Your Beauty. Your Routine."
+    />
+    <meta
+      property="og:description"
+      content="Discover products and build a personalized beauty routine with this AI-powered educational portfolio project."
+    />
+    <meta
+      property="og:image"
+      content="https://patte3am.github.io/09-prj-loreal-routine-builder/img/social-preview.jpg?v=2"
+    />
+    <meta property="og:image:secure_url" content="https://patte3am.github.io/09-prj-loreal-routine-builder/img/social-preview.jpg?v=2" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="L'Oréal Paris AI Routine Builder — Discover Products. Build Your Routine."
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="L'Oréal Paris AI Routine Builder | Your Beauty. Your Routine."
+    />
+    <meta
+      name="twitter:description"
+      content="Discover products and build a personalized beauty routine with this AI-powered educational portfolio project."
+    />
+    <meta
+      name="twitter:image"
+      content="https://patte3am.github.io/09-prj-loreal-routine-builder/img/social-preview.jpg?v=2"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="L'Oréal Paris AI Routine Builder — Discover Products. Build Your Routine."
+    />
+    <title>L'Oréal Paris AI Routine Builder | Your Beauty. Your Routine.</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -12,54 +70,121 @@
   </head>
 
   <body>
+    <div class="announcement-bar">
+      <p>
+        AN EDUCATIONAL BEAUTY EXPERIENCE
+        <span aria-hidden="true">·</span>
+        BUILT FOR YOUR ROUTINE
+      </p>
+    </div>
+    <header class="site-header">
+      <nav class="site-navigation" aria-label="Main navigation">
+        <a class="nav-link" href="#catalog">DISCOVER</a>
+        <a class="brand-lockup" href="#top" aria-label="L'Oréal Paris Routine Builder home">
+          <img src="img/loreal-logo.png" alt="L'Oréal Paris" class="logo" />
+          <span class="brand-paris">PARIS</span>
+        </a>
+        <a class="nav-link" href="#aboutYourRoutine">YOUR ROUTINE</a>
+      </nav>
+    </header>
+
     <div class="page-wrapper">
-      <header class="site-header">
-        <img src="img/loreal-logo.png" alt="L'Oréal logo" class="logo" />
-        <h1 class="site-title">Routine Builder</h1>
-      </header>
-
-      <section class="toolbar" aria-label="Product filters">
-        <label class="search-field" for="searchInput">
-          <span class="search-icon" aria-hidden="true">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </span>
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Search products..."
-            aria-label="Search products by name, brand, or description"
-            autocomplete="off"
-          />
-        </label>
-
-        <label class="category-field" for="categoryFilter">
-          <span class="visually-hidden">Choose a category</span>
-          <select id="categoryFilter" aria-label="Filter products by category">
-            <option value="all">All Categories</option>
-          </select>
-        </label>
-      </section>
-
       <main>
-        <div id="productsContainer" class="products-grid" aria-live="polite"></div>
-        <div id="showMoreWrap" class="show-more-wrap"></div>
+        <section class="hero" id="top" aria-labelledby="heroTitle">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="eyebrow-mark"></span>
+              A MORE PERSONAL BEAUTY RITUAL
+            </p>
+            <h1 id="heroTitle">YOUR BEAUTY.<br /><span>YOUR ROUTINE.</span></h1>
+            <p class="hero-description">
+              Discover beauty products and build a routine that feels like you, with thoughtful
+              AI-powered guidance.
+            </p>
+            <a class="hero-cta" href="#catalog">
+              BUILD YOUR ROUTINE
+              <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+            </a>
+            <p class="hero-note">
+              A student portfolio project · Not an official L’Oréal Paris service
+            </p>
+          </div>
+          <div class="hero-art">
+            <img
+              src="img/hero-still-life.svg"
+              alt="Original editorial illustration of beauty bottles and a sculptural red flower"
+              fetchpriority="high"
+            />
+            <span class="hero-art-caption">THE ART OF YOUR EVERYDAY</span>
+          </div>
+        </section>
 
-        <section class="selected-products" aria-live="polite">
+        <section class="catalog-section" id="catalog" aria-labelledby="catalogTitle">
+          <div class="section-intro">
+            <p class="eyebrow">YOUR EDIT, YOUR WAY</p>
+            <h2 id="catalogTitle">Find your beauty essentials</h2>
+            <p>
+              Explore the catalog, then select the products you would like to include in your
+              routine.
+            </p>
+          </div>
+
+          <section class="toolbar" aria-label="Product filters">
+            <label class="search-field" for="searchInput">
+              <span class="search-icon" aria-hidden="true">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="Search products..."
+                aria-label="Search products by name, brand, or description"
+                autocomplete="off"
+              />
+            </label>
+
+            <label class="category-field" for="categoryFilter">
+              <span class="visually-hidden">Choose a category</span>
+              <select id="categoryFilter" aria-label="Filter products by category">
+                <option value="all">All Categories</option>
+              </select>
+            </label>
+          </section>
+
+          <div id="productsContainer" class="products-grid" aria-live="polite"></div>
+          <div id="showMoreWrap" class="show-more-wrap"></div>
+        </section>
+
+        <section class="selected-products" id="selectedProducts" aria-live="polite">
           <div class="section-heading-row">
-            <h2>Selected Products</h2>
+            <div>
+              <p class="eyebrow">A ROUTINE, CURATED BY YOU</p>
+              <h2>Selected Products</h2>
+            </div>
             <span id="selectedCount" class="selected-count">0 selected</span>
           </div>
           <div id="selectedProductsList" class="selected-products-list"></div>
           <button id="generateRoutine" class="generate-btn" type="button">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            Generate Routine
+            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+            Generate My Routine
           </button>
         </section>
 
-        <section class="chatbox" aria-label="About your routine chat section">
+        <section
+          class="chatbox"
+          id="aboutYourRoutine"
+          aria-label="About your routine chat section"
+        >
           <div class="chatbox-header">
-            <h2>About Your Routine</h2>
-            <p>Get personalized advice and answers about your skincare routine.</p>
+            <div>
+              <p class="eyebrow">YOUR PERSONAL BEAUTY EDITOR</p>
+              <h2>About Your Routine</h2>
+              <p>Get thoughtful guidance and answers about your selected products.</p>
+            </div>
+            <button type="button" id="clearConversation" class="clear-conversation-btn">
+              <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+              Clear conversation
+            </button>
           </div>
 
           <div id="chatWindow" class="chat-window" aria-live="polite"></div>
@@ -75,19 +200,24 @@
               required
             />
             <button type="submit" id="sendBtn" aria-label="Send message">
-              <i class="fa-solid fa-paper-plane"></i>
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
             </button>
           </form>
         </section>
       </main>
 
       <footer class="site-footer">
-        <p>&copy; 2025 L'Oréal. Educational project demo.</p>
-        <nav aria-label="Footer links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Contact</a>
+        <a class="footer-brand" href="#top">L’ORÉAL PARIS</a>
+        <p class="footer-disclaimer">
+          This is an independent educational portfolio project and is not affiliated with or
+          endorsed by L’Oréal.
+        </p>
+        <nav aria-label="Footer navigation">
+          <a href="#catalog">Discover products</a>
+          <a href="#selectedProducts">Selected products</a>
+          <a href="#aboutYourRoutine">About your routine</a>
         </nav>
+        <p class="footer-copyright">&copy; 2026 · Student portfolio project</p>
       </footer>
     </div>
 

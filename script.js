@@ -246,13 +246,88 @@ function renderConversation() {
 
     const bubble = document.createElement("div");
     bubble.className = "chat-bubble";
-    bubble.textContent = message.content;
+    if (message.role === "assistant") {
+      renderFormattedMessage(bubble, message.content);
+    } else {
+      bubble.textContent = message.content;
+    }
 
     row.appendChild(bubble);
     chatWindow.appendChild(row);
   });
 
   chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function addInlineText(parent, text) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+
+  parts.forEach((part) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const strong = document.createElement("strong");
+      strong.textContent = part.slice(2, -2);
+      parent.appendChild(strong);
+      return;
+    }
+
+    parent.appendChild(document.createTextNode(part));
+  });
+}
+
+function renderFormattedMessage(container, content) {
+  const lines = content.split(/\r?\n/);
+  let index = 0;
+
+  while (index < lines.length) {
+    const line = lines[index].trim();
+
+    if (!line) {
+      index += 1;
+      continue;
+    }
+
+    const heading = line.match(/^#{1,3}\s+(.+)/);
+    if (heading) {
+      const headingElement = document.createElement("h3");
+      addInlineText(headingElement, heading[1]);
+      container.appendChild(headingElement);
+      index += 1;
+      continue;
+    }
+
+    const listMatch = line.match(/^(?:[-*]\s+|\d+[.)]\s+)/);
+    if (listMatch) {
+      const ordered = /^\d+[.)]\s+/.test(line);
+      const list = document.createElement(ordered ? "ol" : "ul");
+
+      while (index < lines.length) {
+        const itemLine = lines[index].trim();
+        const itemMatch = itemLine.match(/^(?:[-*]\s+|\d+[.)]\s+)/);
+        if (!itemMatch || /^\d+[.)]\s+/.test(itemLine) !== ordered) {
+          break;
+        }
+
+        const item = document.createElement("li");
+        addInlineText(item, itemLine.slice(itemMatch[0].length));
+        list.appendChild(item);
+        index += 1;
+      }
+
+      container.appendChild(list);
+      continue;
+    }
+
+    const paragraph = document.createElement("p");
+    addInlineText(paragraph, line.replace(/^---+$/, ""));
+    container.appendChild(paragraph);
+    index += 1;
+  }
+}
+
+function clearConversation() {
+  const systemMessage = state.conversationMessages.find((message) => message.role === "system");
+  state.conversationMessages = systemMessage ? [systemMessage] : [];
+  renderConversation();
 }
 
 function appendChatStatus(message, isError = false) {
@@ -434,6 +509,7 @@ selectedProductsList.addEventListener("click", (event) => {
 });
 
 generateRoutineBtn.addEventListener("click", generateRoutine);
+document.getElementById("clearConversation").addEventListener("click", clearConversation);
 
 chatForm.addEventListener("submit", async (event) => {
   event.preventDefault();

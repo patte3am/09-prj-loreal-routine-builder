@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1120" viewBox="0 0 1000 1120" fill="none">
+  <defs>
+    <linearGradient id="backdrop" x1="120" y1="84" x2="906" y2="1077" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7E1018"/>
+      <stop offset=".48" stop-color="#3C080D"/>
+      <stop offset="1" stop-color="#10090A"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="311" y1="343" x2="567" y2="940" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6EDE6" stop-opacity=".96"/>
+      <stop offset=".32" stop-color="#D1B5A2" stop-opacity=".86"/>
+      <stop offset=".72" stop-color="#7C5149" stop-opacity=".92"/>
+      <stop offset="1" stop-color="#2B1718"/>
+    </linearGradient>
+    <linearGradient id="roseGlass" x1="604" y1="469" x2="846" y2="919" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9B3A1"/>
+      <stop offset=".5" stop-color="#A83239"/>
+      <stop offset="1" stop-color="#4A1118"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="455" y1="260" x2="540" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7E5CB"/>
+      <stop offset=".48" stop-color="#B89264"/>
+      <stop offset="1" stop-color="#705036"/>
+    </linearGradient>
+    <linearGradient id="petal" x1="755" y1="145" x2="879" y2="455" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E76A71"/>
+      <stop offset="1" stop-color="#981E2A"/>
+    </linearGradient>
+    <filter id="shadow" x="170" y="257" width="738" height="822" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="30"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="1000" height="1120" filterUnits="userSpaceOnUse">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1000" height="1120" rx="18" fill="url(#backdrop)"/>
+  <circle cx="721" cy="248" r="248" fill="#D52A38" fill-opacity=".12"/>
+  <path d="M0 847C230 769 509 788 1000 706V1120H0V847Z" fill="#140B0C" fill-opacity=".72"/>
+  <ellipse cx="550" cy="936" rx="322" ry="76" fill="#000" fill-opacity=".56" filter="url(#shadow)"/>
+  <path d="M802 168C736 207 697 279 712 346C727 413 787 450 838 417C887 385 902 305 871 242C854 207 829 183 802 168Z" fill="url(#petal)"/>
+  <path d="M814 193C781 259 777 335 817 413" stroke="#F3C1B5" stroke-opacity=".42" stroke-width="3"/>
+  <path d="M711 255C651 218 597 225 579 270C561 316 607 366 678 363C716 360 748 345 772 322C764 293 742 273 711 255Z" fill="#B52835"/>
+  <path d="M688 258C718 281 744 306 772 322" stroke="#F3C1B5" stroke-opacity=".3" stroke-width="3"/>
+  <path d="M790 413C793 461 770 503 739 530" stroke="#B2A17A" stroke-width="5" stroke-linecap="round"/>
+  <path d="M748 477C708 448 669 452 663 479C657 506 692 526 733 519" fill="#68725A"/>
+  <path d="M774 475C810 440 850 445 855 470C861 498 827 520 788 517" fill="#4E5D4B"/>
+  <rect x="320" y="404" width="295" height="528" rx="35" fill="url(#glass)" stroke="#F3E2D6" stroke-opacity=".72" stroke-width="3"/>
+  <path d="M348 442C348 424 363 409 381 409H421V926H371C358 926 348 916 348 903V442Z" fill="#FFF" fill-opacity=".17"/>
+  <rect x="424" y="292" width="88" height="125" rx="10" fill="url(#metal)" stroke="#E8D5B8" stroke-opacity=".65" stroke-width="3"/>
+  <rect x="438" y="258" width="60" height="46" rx="9" fill="#20191A" stroke="#B99A7A" stroke-width="3"/>
+  <path d="M442 321H489" stroke="#FFF" stroke-opacity=".55" stroke-width="4" stroke-linecap="round"/>
+  <text x="467" y="640" fill="#211617" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="4" text-anchor="middle">SKIN</text>
+  <path d="M397 679H539" stroke="#392A27" stroke-opacity=".5" stroke-width="2"/>
+  <text x="467" y="722" fill="#392A27" font-family="Helvetica, Arial, sans-serif" font-size="14" letter-spacing="3" text-anchor="middle">DAILY SERUM</text>
+  <rect x="633" y="530" width="244" height="374" rx="31" fill="url(#roseGlass)" stroke="#F0BDB1" stroke-opacity=".68" stroke-width="3"/>
+  <path d="M656 557C656 545 666 535 678 535H716V899H671C663 899 656 892 656 884V557Z" fill="#FFF" fill-opacity=".16"/>
+  <rect x="704" y="457" width="104" height="86" rx="13" fill="#1B1112" stroke="#C9A97F" stroke-width="3"/>
+  <rect x="726" y="423" width="60" height="42" rx="8" fill="url(#metal)"/>
+  <text x="755" y="709" fill="#FFF9F2" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="3" text-anchor="middle">RITUAL</text>
+  <path d="M694 746H817" stroke="#F9DCD1" stroke-opacity=".7" stroke-width="2"/>
+  <text x="755" y="783" fill="#FFF9F2" font-family="Helvetica, Arial, sans-serif" font-size="12" letter-spacing="2.5" text-anchor="middle">BEAUTY, EDITED</text>
+  <circle cx="245" cy="390" r="4" fill="#F4D6C7"/>
+  <circle cx="830" cy="628" r="3" fill="#F4D6C7" fill-opacity=".72"/>
+  <circle cx="287" cy="790" r="3" fill="#F4D6C7" fill-opacity=".66"/>
+  <path d="M164 167H385" stroke="#D3B7A2" stroke-opacity=".48"/>
+  <path d="M164 167V388" stroke="#D3B7A2" stroke-opacity=".48"/>
+  <path d="M836 953H920" stroke="#D3B7A2" stroke-opacity=".48"/>
+  <path d="M920 869V953" stroke="#D3B7A2" stroke-opacity=".48"/>
+  <text x="96" y="1030" fill="#E9D7CC" fill-opacity=".82" font-family="Helvetica, Arial, sans-serif" font-size="13" letter-spacing="4">A PERSONAL BEAUTY RITUAL</text>
+  <rect width="1000" height="1120" rx="18" filter="url(#grain)" opacity=".55"/>
+</svg>

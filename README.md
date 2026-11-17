@@ -36,3 +36,7 @@ The Worker entry point is `src/worker.js`. `wrangler.jsonc` configures Wrangler 
 The API accepts JSON `POST` requests with a `messages` array. The `/api/chat` endpoint supports CORS only for `https://patte3am.github.io`; `/api/health` can be used to confirm that the Worker is deployed. Requests are size- and message-limited and use a best-effort per-isolate IP rate limit. For stronger abuse prevention on a public endpoint, add a Cloudflare Turnstile check or a persistent rate limiter before broad public use.
 
 The `OPENAI_API_KEY` is read only from the Worker runtime environment and is never sent to the browser. The frontend only reports a successful routine after it receives a valid API response.
+
+## Brand artwork and link previews
+
+The page uses Helvetica/Arial system fonts, the supplied L'Oréal wordmark, and an original SVG beauty still-life illustration. Its Open Graph and Twitter metadata point to `img/social-preview.jpg` (1200 × 630) and the project-specific `img/favicon.svg`. The social image URL includes a version query so messaging services are less likely to reuse an older cached preview; a platform may still retain its own cached card.
