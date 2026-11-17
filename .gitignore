@@ -1,2 +1,6 @@
 # Secrets file containing API keys
 secrets.js
+.dev.vars
+.dev.vars.*
+.wrangler/
+node_modules/

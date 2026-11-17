@@ -1,0 +1,11 @@
+/.git/
+/.github/
+/.devcontainer/
+/.wrangler/
+/node_modules/
+/src/
+/.gitignore
+/.assetsignore
+/AGENTS.md
+/README.md
+/wrangler.jsonc

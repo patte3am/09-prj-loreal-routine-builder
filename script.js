@@ -291,11 +291,17 @@ async function sendRequestToWorker(messages) {
     body: JSON.stringify({ messages }),
   });
 
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}.`);
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("The AI service returned an invalid response.");
   }
 
-  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data?.error || `Request failed with status ${response.status}.`);
+  }
+
   const content = data?.choices?.[0]?.message?.content;
 
   if (!content || typeof content !== "string") {
