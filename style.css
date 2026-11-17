@@ -774,6 +774,24 @@ a:focus-visible {
   margin-top: 5px;
 }
 
+.chat-citations {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #e4dfdb;
+  font-size: 0.82rem;
+}
+
+.chat-citations ul {
+  margin: 5px 0 0 18px;
+  padding-left: 2px;
+}
+
+.chat-citations a {
+  color: #8f1d25;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .chat-empty,
 .chat-status,
 .chat-error,

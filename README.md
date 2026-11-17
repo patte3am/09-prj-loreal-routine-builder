@@ -33,7 +33,7 @@ The Worker entry point is `src/worker.js`. `wrangler.jsonc` configures Wrangler 
 
    The URL includes the Cloudflare account's `workers.dev` subdomain, which is not known until deployment. Do not publish a guessed hostname.
 
-The API accepts JSON `POST` requests with a `messages` array. The `/api/chat` endpoint supports CORS only for `https://patte3am.github.io`; `/api/health` can be used to confirm that the Worker is deployed. Requests are size- and message-limited and use a best-effort per-isolate IP rate limit. For stronger abuse prevention on a public endpoint, add a Cloudflare Turnstile check or a persistent rate limiter before broad public use.
+The API accepts JSON `POST` requests with a `messages` array and sends the conversation to OpenAI's Responses API with its `web_search` tool. The assistant focuses on beauty topics, prioritizes official L'Oréal sources for current product information, and returns cited source links when web search supplies citations. The frontend displays those links beneath the answer. The `/api/chat` endpoint supports CORS only for `https://patte3am.github.io`; `/api/health` can be used to confirm that the Worker is deployed. Requests are size- and message-limited and use a best-effort per-isolate IP rate limit. For stronger abuse prevention on a public endpoint, add a Cloudflare Turnstile check or a persistent rate limiter before broad public use.
 
 The `OPENAI_API_KEY` is read only from the Worker runtime environment and is never sent to the browser. The frontend only reports a successful routine after it receives a valid API response.
 

@@ -248,6 +248,7 @@ function renderConversation() {
     bubble.className = "chat-bubble";
     if (message.role === "assistant") {
       renderFormattedMessage(bubble, message.content);
+      renderCitations(bubble, message.citations);
     } else {
       bubble.textContent = message.content;
     }
@@ -324,6 +325,53 @@ function renderFormattedMessage(container, content) {
   }
 }
 
+function renderCitations(container, citations) {
+  if (!Array.isArray(citations) || !citations.length) {
+    return;
+  }
+
+  const sourceList = document.createElement("div");
+  sourceList.className = "chat-citations";
+
+  const heading = document.createElement("strong");
+  heading.textContent = "Sources";
+  sourceList.appendChild(heading);
+
+  const list = document.createElement("ul");
+  citations.forEach((citation) => {
+    if (!citation || typeof citation.url !== "string") {
+      return;
+    }
+
+    let url;
+    try {
+      url = new URL(citation.url);
+    } catch {
+      return;
+    }
+    if (url.protocol !== "https:") {
+      return;
+    }
+
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = url.href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent =
+      typeof citation.title === "string" && citation.title.trim()
+        ? citation.title.trim()
+        : url.hostname;
+    item.appendChild(link);
+    list.appendChild(item);
+  });
+
+  if (list.childElementCount) {
+    sourceList.appendChild(list);
+    container.appendChild(sourceList);
+  }
+}
+
 function clearConversation() {
   const systemMessage = state.conversationMessages.find((message) => message.role === "system");
   state.conversationMessages = systemMessage ? [systemMessage] : [];
@@ -383,7 +431,10 @@ async function sendRequestToWorker(messages) {
     throw new Error("The AI service did not return a valid routine response.");
   }
 
-  return content;
+  return {
+    content,
+    citations: Array.isArray(data.citations) ? data.citations : [],
+  };
 }
 
 function toggleProductSelection(productId) {
@@ -413,7 +464,11 @@ async function generateRoutine() {
 
   try {
     const reply = await sendRequestToWorker(state.conversationMessages);
-    state.conversationMessages.push({ role: "assistant", content: reply });
+    state.conversationMessages.push({
+      role: "assistant",
+      content: reply.content,
+      citations: reply.citations,
+    });
     renderConversation();
   } catch (error) {
     appendChatStatus(
@@ -439,7 +494,11 @@ async function sendFollowUpQuestion(text) {
 
   try {
     const reply = await sendRequestToWorker(state.conversationMessages);
-    state.conversationMessages.push({ role: "assistant", content: reply });
+    state.conversationMessages.push({
+      role: "assistant",
+      content: reply.content,
+      citations: reply.citations,
+    });
     renderConversation();
   } catch (error) {
     appendChatStatus(

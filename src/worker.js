@@ -1,5 +1,5 @@
 const DEFAULT_ALLOWED_ORIGIN = "https://patte3am.github.io";
-const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+const OPENAI_API_URL = "https://api.openai.com/v1/responses";
 const MAX_BODY_BYTES = 64 * 1024;
 const MAX_MESSAGES = 40;
 const MAX_MESSAGE_CHARS = 16_000;
@@ -11,7 +11,7 @@ const rateLimitBuckets = new Map();
 const SYSTEM_MESSAGE = {
   role: "system",
   content:
-    "You are a professional and friendly L'Oréal beauty and routine advisor. Help users understand their selected products, build personalized routines, explain product order and timing, and answer follow-up questions using only actual product details provided in the conversation. Do not invent ingredients, claims, prices, or medical diagnoses. For potentially irritating products, provide appropriate general precautions. Clearly state when product details are missing.",
+    "You are a professional, friendly beauty advisor focused on skincare, haircare, makeup, fragrance, and beauty routines. Help users understand their selected products, build personalized routines, explain product order and timing, and answer beauty-related follow-up questions. Use the web_search tool to verify current L'Oréal product information, ingredients, availability, recommendations, and routines when current information is needed or details are missing from the conversation. Prefer official L'Oréal brand and product websites; otherwise use reliable sources such as authorized retailers, regulators, and recognized medical or scientific organizations. Clearly distinguish regional availability and cite web-sourced facts with the provided source citations. Do not invent ingredients, claims, prices, or medical diagnoses. For potentially irritating products, provide appropriate general precautions. State when details cannot be verified. Politely redirect questions unrelated to beauty.",
 };
 
 class PayloadTooLargeError extends Error {}
@@ -150,6 +150,61 @@ function validateMessages(messages) {
   return [SYSTEM_MESSAGE, ...normalizedMessages];
 }
 
+function getAssistantResponse(responseData) {
+  const textParts = [];
+  const citations = [];
+
+  for (const item of responseData?.output || []) {
+    if (item.type !== "message" || item.role !== "assistant") {
+      continue;
+    }
+
+    for (const content of item.content || []) {
+      if (content.type !== "output_text" || typeof content.text !== "string") {
+        continue;
+      }
+
+      textParts.push(content.text);
+      for (const annotation of content.annotations || []) {
+        if (annotation.type !== "url_citation" || typeof annotation.url !== "string") {
+          continue;
+        }
+
+        try {
+          const url = new URL(annotation.url);
+          if (url.protocol !== "https:") {
+            continue;
+          }
+
+          citations.push({
+            title:
+              typeof annotation.title === "string" && annotation.title.trim()
+                ? annotation.title.trim()
+                : url.hostname,
+            url: url.href,
+          });
+        } catch {
+          continue;
+        }
+      }
+    }
+  }
+
+  const uniqueCitations = [];
+  const citedUrls = new Set();
+  for (const citation of citations) {
+    if (!citedUrls.has(citation.url)) {
+      citedUrls.add(citation.url);
+      uniqueCitations.push(citation);
+    }
+  }
+
+  return {
+    content: textParts.join("\n").trim(),
+    citations: uniqueCitations,
+  };
+}
+
 async function handleChatRequest(request, env, origin, allowedOrigin) {
   if (origin !== allowedOrigin) {
     return jsonResponse({ error: "Origin is not allowed." }, 403, origin, allowedOrigin);
@@ -217,9 +272,10 @@ async function handleChatRequest(request, env, origin, allowedOrigin) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4.1",
-        messages,
-        max_completion_tokens: 1200,
+        model: "gpt-6-astra",
+        tools: [{ type: "web_search", search_context_size: "medium" }],
+        input: messages,
+        max_output_tokens: 1200,
       }),
     });
   } catch {
@@ -258,7 +314,7 @@ async function handleChatRequest(request, env, origin, allowedOrigin) {
     );
   }
 
-  const content = openAiData?.choices?.[0]?.message?.content;
+  const { content, citations } = getAssistantResponse(openAiData);
   if (typeof content !== "string" || !content.trim()) {
     return jsonResponse(
       { error: "The AI service returned an empty response." },
@@ -278,6 +334,7 @@ async function handleChatRequest(request, env, origin, allowedOrigin) {
           },
         },
       ],
+      citations,
     },
     200,
     origin,
